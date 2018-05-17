@@ -1,0 +1,109 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#define N 5
+
+struct tm{
+int a;
+int (*cmp)(const void* ,const void* );
+};
+
+int compare(const void* c1, const void* c2){
+return (((struct tm*)c1)->a) - (((struct tm*)c2)->a);
+}
+
+int comparechar(const void* a, const void* b){
+if((int)(*(char*) a < *(char*) b)){ return -1;}
+if((int)(*(char*) a > *(char*) b)){ return 1;}
+if((int)(*(char*) a == *(char*) b)){ return 0;}
+}
+
+int compareint(const void* a, const void* b){
+return (*(int*)a - *(int*)b);}
+
+int comparefloat(const void* a, const void* b){
+return (*(float*)a - *(float*)b);}
+
+void swap(void* a, void* b, int size_of_elem){
+for(int i=0; i<size_of_elem; i++){
+char bait=(char*)(a+i);
+(char*)(a+i)=(char*)(b+i);
+(char*)(b+i)=bait;
+}
+}
+
+void bubbleSort(void *arr, int arr_len, int size_of_elem, int(*cmp)(const void* a, const void* b)){
+for(int i=0; i<arr_len; i++){
+for(int j=0; j<arr_len-i-1; j++){
+if(cmp(arr+j*size_of_elem, arr+(j+1)*size_of_elem) > 0){
+swap(arr+j*size_of_elem, arr+(j+1)*size_of_elem, size_of_elem);
+}
+}
+}
+}
+
+int main(){
+int a;
+scanf("%d\n", &a);
+char array1[N];
+int array4[N];
+double array8[N];
+float arrayf[N];
+struct tm arr[N];
+
+switch(a){
+case 1:
+for(int i=0; i<N; i++){
+scanf("%c ", &array1[i]);
+}
+bubbleSort(array1, N, a, comparechar);
+for(int i=0; i<N; i++){
+printf("%c ", array1[i]);
+}
+break;
+
+case 4:
+for(int i=0; i<N; i++){
+scanf("%d", &array4[i]);
+}
+bubbleSort(array4, N, a, compareint);
+for(int i=0; i<N; i++){
+printf("%d ", array4[i]);
+}
+break;
+
+case 5:
+for(int i=0; i<N; i++){
+scanf("%f", &arrayf[i]);
+}
+bubbleSort(arrayf, N, 4, comparefloat);
+for(int i=0; i<N; i++){
+printf("%lg ", arrayf[i]);
+}
+break;
+
+case 8:
+for(int i=0; i<N; i++){
+scanf("%lf", &array8[i]);
+}
+bubbleSort(array8, N, a, comparefloat);
+for(int i=0; i<N; i++){
+printf("%lg ", array8[i]);
+}
+break;
+
+case 10:
+for(int i=0; i<N; i++){
+scanf("%d", &(arr[i].a));
+arr[i].cmp=compare;
+}
+bubbleSort(arr, N, sizeof(struct tm), compare);
+for(int i=0; i<N; i++){
+printf("%d ", arr[i].a);
+}
+break;
+
+default: printf("Error\n");
+return 0;
+}
+}
